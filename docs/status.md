@@ -42,4 +42,4 @@ If user1 or user2 from the first use case becomes Covid postive, all users' code
 enter user1 generated code:
 ```
 
-<img src="https://raw.githubusercontent.com/boring1234/dailychecker/main/docs/user1positive.png" width="560"/>
+<img src="https://raw.githubusercontent.com/boring1234/dailychecker/main/docs/user1postive.png" width="560"/>
