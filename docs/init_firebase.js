@@ -1,13 +1,3 @@
-// var firebaseConfig = {
-//     apiKey: "AIzaSyB8jBV9C25DNYxLkai2V88cqXr6oBXbZWw",
-//     authDomain: "covid-19-fba01.firebaseapp.com",
-//     projectId: "covid-19-fba01",
-//     storageBucket: "covid-19-fba01.appspot.com",
-//     messagingSenderId: "761171749857",
-//     appId: "1:761171749857:web:d54200aeabdcc38328c0a0"
-// };
-// firebase.initializeApp(firebaseConfig);
-
 var firebaseConfig = {
     apiKey: "AIzaSyCa73R02XR0nPwdxsTNPl_DYu4IOoE2k5U",
     authDomain: "inf172project.firebaseapp.com",
