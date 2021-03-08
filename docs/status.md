@@ -3,7 +3,8 @@ layout: default
 title:  Status
 ---
 # Source code
-https://github.com/boring1234/dailychecker/blob/main/docs/index.html
+https://github.com/boring1234/dailychecker/blob/main/docs/index.html<br>
+https://github.com/boring1234/dailychecker/blob/main/docs/init_firebase.js
 
 # Solution
 
