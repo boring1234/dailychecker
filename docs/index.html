@@ -1,0 +1,190 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script defer src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/8.2.4/firebase-database.js"></script>
+<script defer src="./init_firebase.js"></script>
+
+<script>
+    function submitForm() {
+        var isFever = $("input[name='fever']:checked").val() == "on";
+        var isCough = $("input[name='cough']:checked").val() == "on";
+        var isChill = $("input[name='chill']:checked").val() == "on";
+        var roomNumber = $("input[name='roomNumber']").val();
+        if (isFever === true || isCough === true || isChill === true) {
+            $("#code-output").text("Warning: Please self-quarantine!!!");
+            return
+        }
+        if (roomNumber === "") {
+            $("#code-output").text("Warning: RoomNumber should not be null;");
+            return
+        }
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDay() + 1;
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (day >= 0 && day <= 9) {
+            day = "0" + day;
+        }
+        var date = month + "" + day;
+        var randomNumber = Math.random().toString().slice(-6);
+        writeCovidData(date, roomNumber, randomNumber, isFever, isCough, isChill);
+        $("#code-output").text("Code: " + date + "-" + roomNumber + "-" + randomNumber);
+    }
+</script>
+
+
+<script>
+    function writeCovidData(date, roomNumber, randomNumber, isFever, isCough, isChill) {
+        var roomRef = firebase.database().ref(roomNumber);
+        var newUserRef = roomRef.push();
+        newUserRef.set({
+            date: date,
+            roomNumber: roomNumber,
+            randomNumber: randomNumber,
+            isFever: isFever,
+            isCough: isCough,
+            isChill: isChill,
+            code: date + "-" + roomNumber + "-" + randomNumber
+    });
+}
+</script>
+
+<script>
+    function submitCode() {
+        var code = $("input[name='code']").val();
+        var roomNumber = code.split("-")[1];
+        readCovidData(roomNumber);
+    }
+</script>
+
+<script>
+    function readCovidData(roomNumber) {
+        var roomRef = firebase.database().ref(roomNumber);
+        var arr = [];
+        roomRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            var html = "Matched Code: <br/>";
+            for (var key in data) {
+                var code = data[key]["code"];
+                if (code !== undefined) {
+                    html = html + code + "<br/>"
+                }
+            }
+            $("#code-list").html(html);
+        }
+    );
+}
+</script>
+
+<head>
+    <title>COVID-19</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <!-- covid 19 form -->
+                <h2>COVID-19 FORM</h2>
+                <!-- <div>
+                    <label for="fever">Fever</label>
+                    <input type="checkbox" id="fever" name="fever" style="float: right"><br/>
+                </div> -->
+                <!-- <div>
+                    <label for="cough">Cough</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div> -->
+                <div>
+                    <label for="cough">Fever (100+F/37.7+C)</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Chills</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Muscle or body aches</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Cough (new)</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Shortness of breath or difficulty breathing (new)</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Unexpected fatigue</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Sore throat</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Loss of taste or smell</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Headache</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Diarrhea, vomiting, or nausea</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Congestion or runny nose</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                    <label for="cough">Rash(es)</label>
+                    <input type="checkbox" id="cough" name="cough" style="float: right"><br/>
+                </div>
+                <div>
+                <ol >
+                    <li>Have you been tested for COVID-19 using a nasal, oral, or nasopharyngeal swab in the past 14 days?
+<b>NOTE:</b>
+If you are in campus housing and performed the mandatory Covid testing but are awaiting your test results, you should reply NO to this question.
+If you have already discussed your test with UCI’s Student Health Center (SHC) and have been cleared, you should reply NO to this question. <input type="checkbox" id="cough" name="cough" style="float: right"></li>
+                    <li>Within the past 14 days has anyone you live with had a positive COVID-19 test using a nasal, oral, or nasopharyngeal swab (excluding any contact previously reported in this symptom screening program)?
+<b>NOTE:</b> If you have already discussed a positive test for someone living in your home with SHC and have been cleared by SHC you should reply NO to this question. <input type="checkbox" id="cough" name="cough" style="float: right"></li>
+<li>Have you been within 6 feet of a COVID-19 infected person for at least 15 minutes within the last 14 days? 
+<b>NOTE:</b> If you have already discussed possible exposure with SHC and have been cleared by SHC you should reply NO to this question. <input type="checkbox" id="cough" name="cough" style="float: right"></li>
+                </ol>
+                </div>
+                <div>
+                    
+                    <label for="chill" style="float: left">Classroom Number</label>
+                    <input type="text" id="roomNumber" name="roomNumber" style="float: right;"><br/><br/>
+
+                </div>
+                <div>
+                    <input type="button" value="I am in the classroom now" onclick="submitForm()" style="background-color: #58ACFA"><br/><br/>
+                    <label for="code-output" id="code-output">Generated Random ID Code:</label>
+                </div>
+                <br/><br/><br/>
+                <!-- code positive? -->
+                <h2>Covid Positive?</h2><br/>
+                <div>
+                    <label for="enter-code">Enter Code</label>
+                    <input type="text" id="code" name="code" style="float: right"><br/><br/>
+                </div>
+                <div>
+                    <input type="button" value="Submit" onclick="submitCode()"><br/><br/>
+                </div>
+                <br/>
+                <div id="code-list"></div>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+</body>
