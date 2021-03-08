@@ -2,6 +2,9 @@
 layout: default
 title:  Status
 ---
+# Source code
+https://github.com/boring1234/dailychecker/blob/main/docs/index.html
+
 # Solution
 
 The key feature for our web-app is that it relays on location information input from users. This app does not ask for names, emails, and other sensitive information from individuals.
